@@ -39,4 +39,9 @@ export class ExportController {
   async stream(@Res() response: Response): Promise<any> {
     return await this.exportService.stream();
   }
+
+  @Get('import')
+  async import(): Promise<any> {
+    return await this.exportService.import();
+  }
 }

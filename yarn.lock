@@ -633,6 +633,11 @@
   resolved "https://registry.npmjs.org/@nestjs/mapped-types/-/mapped-types-1.0.1.tgz"
   integrity sha512-NFvofzSinp00j5rzUd4tf+xi9od6383iY0JP7o0Bnu1fuItAUkWBgc4EKuIQ3D+c2QI3i9pG1kDWAeY27EMGtg==
 
+"@nestjs/mongoose@^9.0.2":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/mongoose/-/mongoose-9.0.2.tgz#3f06c57066c33766f293676bbfdd7474bfcff9af"
+  integrity sha512-v4Umk3hssJ1RJJIe2LBVHvrsGfY+srq2nfOVCw36PGe7+eObzSBIryMJi+h2mTZpYIohNRGM2O66clEmhctYQQ==
+
 "@nestjs/platform-express@^8.0.0":
   version "8.2.4"
   resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-8.2.4.tgz"
@@ -3558,6 +3563,11 @@ levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
+
+line-by-line@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/line-by-line/-/line-by-line-0.1.6.tgz#6236edd1db2d1695addf11f0268e74a181561c30"
+  integrity sha512-MmwVPfOyp0lWnEZ3fBA8Ah4pMFvxO6WgWovqZNu7Y4J0TNnGcsV4S1LzECHbdgqk1hoHc2mFP1Axc37YUqwafg==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"

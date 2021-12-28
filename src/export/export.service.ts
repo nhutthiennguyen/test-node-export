@@ -1,16 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
-import { readFileSync } from 'fs';
-import { Readable } from 'stream';
-var xlsx = require('node-xlsx');
+import { chmodSync, readFileSync } from 'fs';
+import { Model } from 'mongoose';
+import { ProductDocument } from './schema';
 const XlsxTemplate = require('xlsx-template');
 const { createReadStream, createWriteStream } = require('fs');
-const csvWriter = require('csv-write-stream');
-import { transform } from 'stream-transform';
-const FileDownload = require('js-file-download');
+const readLine = require('readline');
+const stream = require('stream');
+const readerByLine = require('line-by-line');
 @Injectable()
 export class ExportService {
-  constructor() {}
+  constructor(
+    @InjectModel('Product')
+    private readonly productModel: Model<ProductDocument>,
+  ) {}
   async error429() {
     for (let i = 1; i <= 20; i++) {
       try {
@@ -106,7 +110,7 @@ export class ExportService {
 
       stream.write(`id,  type,  tags,  title \n`);
 
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 1; i <= 100; i++) {
         // const rs = await this.getData(
         //   `https://apis.haravan.com/com/products.json?page=${i}`,
         //   '7BBF09143DDCBA01A5F39FB4BD819713968036FC6C8AED78BE63050C7A744CD9',
@@ -165,5 +169,63 @@ export class ExportService {
     });
 
     return data.data;
+  }
+
+  async import() {
+    try {
+      // const instream = createReadStream(
+      //   `${process.cwd()}/src/export/output/file.csv`,
+      // );
+
+      // const outstream = new stream();
+
+      // const rl = readLine.createInterface(instream, outstream);
+
+      // rl.on('line', async (line) => {
+      //   const arr = line.split(',');
+
+      //   if (arr[0] === 'id' || !line) {
+      //     return;
+      //   }
+
+      //   if (count <= 1) {
+      //     await this.productModel.create({
+      //       id: arr[0],
+      //       type: arr[1],
+      //       tags: arr[2],
+      //       title: arr[3],
+      //     });
+      //   }
+      // });
+
+      // rl.on('close', function () {
+      //   console.log('have done');
+      // });
+
+      const rl = new readerByLine(
+        `${process.cwd()}/src/export/output/file.csv`,
+      );
+
+      rl.on('error', function (err) {
+        console.log(err);
+      });
+
+      rl.on('line', async (line) => {
+        const arr = line.split(',');
+
+        await this.productModel.create({
+          id: arr[0],
+          type: arr[1],
+          tags: arr[2],
+          title: arr[3],
+        });
+      });
+
+      rl.on('end', function () {
+        console.log('have done');
+      });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 }
