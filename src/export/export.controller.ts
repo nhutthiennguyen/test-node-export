@@ -44,4 +44,9 @@ export class ExportController {
   async import(): Promise<any> {
     return await this.exportService.import();
   }
+
+  @Get('query')
+  async query(): Promise<any> {
+    return await this.exportService.query();
+  }
 }

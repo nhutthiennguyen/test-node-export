@@ -2,7 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
 import { chmodSync, readFileSync } from 'fs';
-import { Model } from 'mongoose';
+import { Collection, Model } from 'mongoose';
+import { doc } from 'prettier';
 import { ProductDocument } from './schema';
 const XlsxTemplate = require('xlsx-template');
 const { createReadStream, createWriteStream } = require('fs');
@@ -224,6 +225,24 @@ export class ExportService {
       rl.on('end', function () {
         console.log('have done');
       });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async query() {
+    try {
+      let data = [];
+      const cursor = this.productModel.find({}).batchSize(50).cursor();
+
+      for (
+        let doc = await cursor.next();
+        doc != null;
+        doc = await cursor.next()
+      ) {
+        data.push(doc);
+      }
+      return data;
     } catch (error) {
       throw new BadRequestException(error);
     }
